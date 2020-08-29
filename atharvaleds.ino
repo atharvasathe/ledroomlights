@@ -39,8 +39,6 @@ String header;
 String light_state = "off";
 String output4State = "off";
 
-uint32_t current_color = strip.Color(255, 0, 0);
-
 // Current time
 unsigned long currentTime = millis();
 // Previous time
@@ -60,6 +58,8 @@ Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 //   NEO_RGBW    Pixels are wired for RGBW bitstream (NeoPixel RGBW products)
 
 // setup() function -- runs once at startup --------------------------------
+
+uint32_t current_color = strip.Color(255, 0, 0);
 
 void setup() {
   Serial.begin(115200);
@@ -215,18 +215,16 @@ void loop() {
 }
 
 void checkState() {
-  if (light_state == "on") {
+  if (light_state == "chase") {
     if (current_led > LED_COUNT) {
       current_led = 0;
-      strip.clear();
+      changeColor();
     }
-    colorWipe(current_color, 50);  // Red
-    Serial.println("power on");
+    colorWipe(current_color, 50);
   } else if (light_state == "off") {
     strip.clear();
     strip.show();
     current_led = 0;
-    Serial.println("power off");
   }
 }
 
@@ -237,9 +235,9 @@ void changeColor(){
     current_color = strip.Color(0,0,255);
   } else if (current_color == strip.Color(0,0,255)){
     current_color = strip.Color(255,69,0);
-  } else if (current_color == "orange"){
-    current_color = "lavender";
-  }
+  } else if (current_color == strip.Color(255,69,0)){
+    current_color = strip.Color(123,104,238);
+  } 
 }
 
 // Some functions of our own for creating animated effects -----------------
